@@ -4,6 +4,8 @@
 # find pizza prob for each word
 # predict by summing probs
 
+# score 0.53751
+
 # caveat: I am just learning Julia and this is an exercise.
 
 # rbroberg: 20140822
@@ -92,7 +94,7 @@ cpreds=c2.>cutoff;
 
 # take a look ...
 sum(zas)/length(zas) # .24604 for training data
-sum(cpreds)/length(cpreds) # .31821 for prediction in test data
+sum(cpreds)/length(cpreds) # .31821 for predictions in test data
 
 # create submission files
 mrow=size(jtest)[1];
@@ -101,7 +103,7 @@ sarr=zeros(length(reqid),2);
 sarr=convert(Array{Any,2},sarr);
 sarr[:,1]=reqid;
 sarr[:,2]=cpreds*1;
-df=DataFrame(sarr,["request_id","requester_received_pizza"]);
+df=DataFrame(sarr);
 names!(df,[symbol("request_id"),symbol("requester_received_pizza")]);
 writetable(submitdir*"submit.sentiment.title.text.csv",
 	df[:,[1,2]],separator=',',header=true);
