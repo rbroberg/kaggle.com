@@ -1,0 +1,46 @@
+function cleanString(w)
+    w=lowercase(w);
+    w=replace(w,"[Request]","")
+    w=replace(w,"."," ");
+    w=replace(w,","," ");
+    w=replace(w,"/"," ");
+    w=replace(w,"<"," ");
+    w=replace(w,">"," ");
+    w=replace(w,"?"," ");
+    w=replace(w,";"," ");
+    w=replace(w,":"," ");
+    w=replace(w,"'"," ");
+    w=replace(w,'"'," "); #" silly stuff for syntax highlighter
+    w=replace(w,"["," ");
+    w=replace(w,"{"," ");
+    w=replace(w,"]"," ");
+    w=replace(w,"}"," ");
+    w=replace(w,"\\"," ");
+    w=replace(w,"|"," ");
+    w=replace(w,"\'"," "); # this is the ` tick mark
+    w=replace(w,"~"," ");
+    w=replace(w,"!"," ");
+    w=replace(w,"\@"," "); # this is an @ char
+    w=replace(w,"#"," ");
+    w=replace(w,"\$"," ");
+    w=replace(w,"%"," ");
+    w=replace(w,"^"," ");
+    w=replace(w,"&"," ");
+    w=replace(w,"*"," ");
+#    w=replace(w,""," "); open parens
+#    w=replace(w,""," "); close parens
+    w=replace(w,"-"," ");
+    w=replace(w,"_"," ");
+    w=replace(w,"="," ");
+    w=replace(w,"+"," ");
+    w=replace(w,"1"," ");
+    w=replace(w,"2"," ");
+    w=replace(w,"3"," ");
+    w=replace(w,"4"," ");
+    w=replace(w,"5"," ");
+    w=replace(w,"6"," ");
+    w=replace(w,"7"," ");
+    w=replace(w,"8"," ");
+    w=replace(w,"9"," ");
+    w=replace(w,"0"," ");
+end
