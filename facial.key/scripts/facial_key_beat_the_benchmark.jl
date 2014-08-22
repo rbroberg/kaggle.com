@@ -40,46 +40,48 @@ left_eye_center_x_mean=int(round(mean(dropna(dftrain[:,:left_eye_center_x]))));
 left_eye_center_y_mean=int(round(mean(dropna(dftrain[:,:left_eye_center_y]))));
 left_eye_center_x_std=int(std(dropna(dftrain[:,:left_eye_center_x]))) # 4;
 left_eye_center_y_std=int(std(dropna(dftrain[:,:left_eye_center_y]))) # 4;
-x1=left_eye_center_x_mean-2*left_eye_center_x_std;
-x2=left_eye_center_x_mean+2*left_eye_center_x_std;
-y1=left_eye_center_y_mean-2*left_eye_center_y_std;
-y2=left_eye_center_y_mean+2*left_eye_center_y_std;
-xrng=4*left_eye_center_x_std+1;
-yrng=4*left_eye_center_y_std+1;
+left_eye_x1=left_eye_center_x_mean-2*left_eye_center_x_std;
+left_eye_x2=left_eye_center_x_mean+2*left_eye_center_x_std;
+left_eye_y1=left_eye_center_y_mean-2*left_eye_center_y_std;
+left_eye_y2=left_eye_center_y_mean+2*left_eye_center_y_std;
+left_eye_xrng=4*left_eye_center_x_std+1;
+left_eye_yrng=4*left_eye_center_y_std+1;
 function find_left_eye_center(img)
 	img=reshape(img,(96,96));
 	#view(img/256); # rotated
 	img=img';
 	#view(img/256);# hey! img#1
 	#view(img[y1:y2,x1:x2]/256); # hey! its an eye img#1
-	mn=findin(img[y1:y2,x1:x2],minimum(img[y1:y2,x1:x2]));
-	feature_y=int(mn%yrng[1])[1];
-	feature_x=int(mn/xrng[1])[1];
+	mn=findin(img[left_eye_y1:left_eye_y2,left_eye_x1:left_eye_x2],
+		minimum(img[left_eye_y1:left_eye_y2,left_eye_x1:left_eye_x2]));
+	feature_x=int(mn/left_eye_xrng[1])[1];
+	feature_y=int(mn%left_eye_yrng[1])[1];
 	#img[y1:y2,x1:x2][feature_y,feature_x]
-	(feature_x,feature_y)
+	(left_eye_x1+feature_x-1,left_eye_y1+feature_y-1)
 end
 
 right_eye_center_x_mean=int(round(mean(dropna(dftrain[:,:right_eye_center_x]))));
 right_eye_center_y_mean=int(round(mean(dropna(dftrain[:,:right_eye_center_y]))));
 right_eye_center_x_std=int(std(dropna(dftrain[:,:right_eye_center_x]))) # 4;
 right_eye_center_y_std=int(std(dropna(dftrain[:,:right_eye_center_y]))) # 4;
-x1=right_eye_center_x_mean-2*right_eye_center_x_std;
-x2=right_eye_center_x_mean+2*right_eye_center_x_std;
-y1=right_eye_center_y_mean-2*right_eye_center_y_std;
-y2=right_eye_center_y_mean+2*right_eye_center_y_std;
-xrng=4*right_eye_center_x_std+1;
-yrng=4*right_eye_center_y_std+1;
+right_eye_x1=right_eye_center_x_mean-2*right_eye_center_x_std;
+right_eye_x2=right_eye_center_x_mean+2*right_eye_center_x_std;
+right_eye_y1=right_eye_center_y_mean-2*right_eye_center_y_std;
+right_eye_y2=right_eye_center_y_mean+2*right_eye_center_y_std;
+right_eye_xrng=4*right_eye_center_x_std+1;
+right_eye_yrng=4*right_eye_center_y_std+1;
 function find_right_eye_center(img)
 	img=reshape(img,(96,96));
 	#view(img/256); # rotated
 	img=img';
 	#view(img/256);# hey! img#1
 	#view(img[y1:y2,x1:x2]/256); # hey! its an eye img#1
-	mn=findin(img[y1:y2,x1:x2],minimum(img[y1:y2,x1:x2]));
-	feature_y=int(mn%yrng[1])[1];
-	feature_x=int(mn/xrng[1])[1];
+	mn=findin(img[right_eye_y1:right_eye_y2,right_eye_x1:right_eye_x2],
+		minimum(img[right_eye_y1:right_eye_y2,right_eye_x1:right_eye_x2]));
+	feature_x=int(mn/right_eye_xrng[1])[1];
+	feature_y=int(mn%right_eye_yrng[1])[1];
 	#img[y1:y2,x1:x2][feature_y,feature_x]
-	(feature_x,feature_y)
+	(right_eye_x1+feature_x-1,right_eye_y1+feature_y-1)
 end
 
 # create image array
@@ -95,12 +97,17 @@ featuremean=[mean(dropna(dftrain[:,i])) for i in 1:30]';
 
 # run patch functions for left and right eye center
 xeyeidx=dfsubmit[dfsubmit[:,:FeatureName].=="left_eye_center_x",:RowId];
-[dfsubmit[i,:left_eye_center_x]=find_right_eye_center(imgs[dfsubmit[i,:ImageId]]) for i in xeyeidx]
+[dfsubmit[i,:Location]=find_left_eye_center(imgs[dfsubmit[i,:ImageId],:])[1] for i in xeyeidx];
+yeyeidx=dfsubmit[dfsubmit[:,:FeatureName].=="left_eye_center_y",:RowId];
+[dfsubmit[i,:Location]=find_left_eye_center(imgs[dfsubmit[i,:ImageId],:])[2] for i in yeyeidx];
 
-xeyeidx=dfsubmit[:,:FeatureName].=="right_eye_center_x";
-yeyeidx=dfsubmit[:,:FeatureName].=="right_eye_center_y";
+xeyeidx=dfsubmit[dfsubmit[:,:FeatureName].=="right_eye_center_x",:RowId];
+[dfsubmit[i,:Location]=find_right_eye_center(imgs[dfsubmit[i,:ImageId],:])[1] for i in xeyeidx];
+yeyeidx=dfsubmit[dfsubmit[:,:FeatureName].=="right_eye_center_y",:RowId];
+[dfsubmit[i,:Location]=find_right_eye_center(imgs[dfsubmit[i,:ImageId],:])[2] for i in yeyeidx];
+
 
 # write submission
-writetable(submitdir*"submit.mean.a.b.csv",
+writetable(submitdir*"submit.mean.patch.eye.center.left.right.csv",
 	dfsubmit[:,[1,4]],separator=',',header=true);
 	
