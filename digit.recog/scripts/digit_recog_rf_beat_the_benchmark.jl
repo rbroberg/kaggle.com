@@ -31,7 +31,7 @@ features = array(dftrain[:,2:end]);
 # nfeatures = 28
 # 10 trees: Mean Accuracy: 0.92933, Submission Score: 0.93443
 # 100 trees: Mean Accuracy: 0. , Submission Score:
-# 1000 trees: Mean Accuracy: 0. , Submission Score:
+# 1000 trees: Mean Accuracy: 0.96010 , Submission Score: (~5 hrs per 'fold')
 nfeatures=int(size(features)[2]^0.5); # 28
 ntrees=1000;
 accuracy=nfoldCV_forest(labels, features, nfeatures, ntrees, 3);
