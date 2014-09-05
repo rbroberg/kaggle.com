@@ -31,50 +31,51 @@ indx <- createFolds(Ytrain[,1], returnTrain = TRUE)
 ctrl <- trainControl(method = "cv", index = indx)
 
 # ===================================================================
-# Random Forest Model
+# Bagged Cart Model
 # ===================================================================
-library(randomForest)
+library(ipred)
+library(plyr)
 
 #predict Ca
-rfTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
-                 method = "rf",
+treebagTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
+                 method = "treebag",
                  trControl = ctrl)
-rfTuneCa
-#RMSE = 0.342, mtry=14
-rfResults <- data.frame(PIDN = IDtest,
-                          Ca = predict(rfTuneCa, Xtestfiltered))
+treebagTuneCa
+#RMSE = 0.472
+treebagResults <- data.frame(PIDN = IDtest,
+                          Ca = predict(treebagTuneCa, Xtestfiltered))
 
 #predict P
-rfTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
-                  method = "rf",
+treebagTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
+                  method = "treebag",
                   trControl = ctrl)
-rfTuneP
-#RMSE = 0.789, mtry = 2
-rfResults$P <- predict(rfTuneP,Xtestfiltered)
+treebagTuneP
+#RMSE = 0.903
+treebagResults$P <- predict(treebagTuneP,Xtestfiltered)
 
 #predict pH
-rfTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
-                 method = "rf",
+treebagTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
+                 method = "treebag",
                  trControl = ctrl)
-rfTunepH
-#RMSE = 0.432, mtry = 14
-rfResults$pH <- predict(rfTunepH,Xtestfiltered)
+treebagTunepH
+#RMSE = 0.553
+treebagResults$pH <- predict(treebagTunepH,Xtestfiltered)
 
 #predict SOC
-rfTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
-                  method = "rf",
+treebagTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
+                  method = "treebag",
                   trControl = ctrl)
-rfTuneSOC
-#RMSE = 0.450, mtry=27
-rfResults$SOC <- predict(rfTuneSOC,Xtestfiltered)
+treebagTuneSOC
+#RMSE = 0.558
+treebagResults$SOC <- predict(treebagTuneSOC,Xtestfiltered)
 
 #predict Sand
-rfTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
-                   method = "rf",
+treebagTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
+                   method = "treebag",
                    trControl = ctrl)
-rfTuneSand
-#RMSE = 0.366, mtry=14
-rfResults$Sand <- predict(rfTuneSand,Xtestfiltered)
+treebagTuneSand
+#RMSE = 0.475
+treebagResults$Sand <- predict(treebagTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.rf.csv",row.names = FALSE)
+write.csv(treebagResults,file = "../submissions/submit.treebag.csv",row.names = FALSE)

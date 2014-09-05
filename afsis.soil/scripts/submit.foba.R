@@ -31,50 +31,51 @@ indx <- createFolds(Ytrain[,1], returnTrain = TRUE)
 ctrl <- trainControl(method = "cv", index = indx)
 
 # ===================================================================
-# Random Forest Model
+# Forward Backward Ridge Regression with Variable Selection
 # ===================================================================
-library(randomForest)
+
+library(foba)
 
 #predict Ca
-rfTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
-                 method = "rf",
+fobaTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
+                 method = "foba",
                  trControl = ctrl)
-rfTuneCa
-#RMSE = 0.342, mtry=14
-rfResults <- data.frame(PIDN = IDtest,
-                          Ca = predict(rfTuneCa, Xtestfiltered))
+fobaTuneCa
+#RMSE = 0.399, k=27, lambda=0.001
+fobaResults <- data.frame(PIDN = IDtest,
+                          Ca = predict(fobaTuneCa, Xtestfiltered))
 
 #predict P
-rfTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
-                  method = "rf",
+fobaTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
+                  method = "foba",
                   trControl = ctrl)
-rfTuneP
-#RMSE = 0.789, mtry = 2
-rfResults$P <- predict(rfTuneP,Xtestfiltered)
+fobaTuneP
+#RMSE = 0.913, k=14, lambda=0.1
+fobaResults$P <- predict(fobaTuneP,Xtestfiltered)
 
 #predict pH
-rfTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
-                 method = "rf",
+fobaTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
+                 method = "foba",
                  trControl = ctrl)
-rfTunepH
-#RMSE = 0.432, mtry = 14
-rfResults$pH <- predict(rfTunepH,Xtestfiltered)
+fobaTunepH
+#RMSE = 0.508, k=27, lambda=0.001
+fobaResults$pH <- predict(fobaTunepH,Xtestfiltered)
 
 #predict SOC
-rfTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
-                  method = "rf",
+fobaTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
+                  method = "foba",
                   trControl = ctrl)
-rfTuneSOC
-#RMSE = 0.450, mtry=27
-rfResults$SOC <- predict(rfTuneSOC,Xtestfiltered)
+fobaTuneSOC
+#RMSE = 0.512, k=27, lambda=0.001
+fobaResults$SOC <- predict(fobaTuneSOC,Xtestfiltered)
 
 #predict Sand
-rfTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
-                   method = "rf",
+fobaTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
+                   method = "foba",
                    trControl = ctrl)
-rfTuneSand
-#RMSE = 0.366, mtry=14
-rfResults$Sand <- predict(rfTuneSand,Xtestfiltered)
+fobaTuneSand
+#RMSE = 0.475, k=27, lambda=0.001
+fobaResults$Sand <- predict(fobaTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.rf.csv",row.names = FALSE)
+write.csv(fobaResults,file = "../submissions/submit.foba.csv",row.names = FALSE)

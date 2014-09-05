@@ -1,6 +1,9 @@
 # https://www.kaggle.com/c/street-view-getting-started-with-julia/details/knn-tutorial
 #Pkg.add("DataFrames")
 
+# suggestion to try: # replace euclidean distance with tangent distance
+# https://github.com/pulkitjain1821/Artificial-Intelligence-CS365/blob/master/hw1/HW1/tangent_d.m
+
 addprocs(1) # just in case someone isn't reading
 # addprocs(4)
 

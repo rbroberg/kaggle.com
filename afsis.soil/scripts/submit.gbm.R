@@ -31,50 +31,51 @@ indx <- createFolds(Ytrain[,1], returnTrain = TRUE)
 ctrl <- trainControl(method = "cv", index = indx)
 
 # ===================================================================
-# Random Forest Model
+# Stochastic Gradient Boosting
 # ===================================================================
-library(randomForest)
+
+library(gbm)
 
 #predict Ca
-rfTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
-                 method = "rf",
+gbmTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
+                 method = "gbm",
                  trControl = ctrl)
-rfTuneCa
-#RMSE = 0.342, mtry=14
-rfResults <- data.frame(PIDN = IDtest,
-                          Ca = predict(rfTuneCa, Xtestfiltered))
+gbmTuneCa
+#RMSE = 0.399, k=27, lambda=0.001
+gbmResults <- data.frame(PIDN = IDtest,
+                          Ca = predict(gbmTuneCa, Xtestfiltered))
 
 #predict P
-rfTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
-                  method = "rf",
+gbmTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
+                  method = "gbm",
                   trControl = ctrl)
-rfTuneP
-#RMSE = 0.789, mtry = 2
-rfResults$P <- predict(rfTuneP,Xtestfiltered)
+gbmTuneP
+#RMSE = 0.913, k=14, lambda=0.1
+gbmResults$P <- predict(gbmTuneP,Xtestfiltered)
 
 #predict pH
-rfTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
-                 method = "rf",
+gbmTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
+                 method = "gbm",
                  trControl = ctrl)
-rfTunepH
-#RMSE = 0.432, mtry = 14
-rfResults$pH <- predict(rfTunepH,Xtestfiltered)
+gbmTunepH
+#RMSE = 0.508, k=27, lambda=0.001
+gbmResults$pH <- predict(gbmTunepH,Xtestfiltered)
 
 #predict SOC
-rfTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
-                  method = "rf",
+gbmTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
+                  method = "gbm",
                   trControl = ctrl)
-rfTuneSOC
-#RMSE = 0.450, mtry=27
-rfResults$SOC <- predict(rfTuneSOC,Xtestfiltered)
+gbmTuneSOC
+#RMSE = 0.512, k=27, lambda=0.001
+gbmResults$SOC <- predict(gbmTuneSOC,Xtestfiltered)
 
 #predict Sand
-rfTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
-                   method = "rf",
+gbmTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
+                   method = "gbm",
                    trControl = ctrl)
-rfTuneSand
-#RMSE = 0.366, mtry=14
-rfResults$Sand <- predict(rfTuneSand,Xtestfiltered)
+gbmTuneSand
+#RMSE = 0.475, k=27, lambda=0.001
+gbmResults$Sand <- predict(gbmTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.rf.csv",row.names = FALSE)
+write.csv(gbmResults,file = "../submissions/submit.gbm.csv",row.names = FALSE)

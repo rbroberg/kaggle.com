@@ -31,50 +31,49 @@ indx <- createFolds(Ytrain[,1], returnTrain = TRUE)
 ctrl <- trainControl(method = "cv", index = indx)
 
 # ===================================================================
-# Random Forest Model
+# Bayesian Generalized Linear Model Regression Model
 # ===================================================================
-library(randomForest)
 
 #predict Ca
-rfTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
-                 method = "rf",
+gaussprLinearTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
+                 method = "gaussprLinear",
                  trControl = ctrl)
-rfTuneCa
-#RMSE = 0.342, mtry=14
-rfResults <- data.frame(PIDN = IDtest,
-                          Ca = predict(rfTuneCa, Xtestfiltered))
+gaussprLinearTuneCa
+#RMSE = 0.399
+gaussprLinearResults <- data.frame(PIDN = IDtest,
+                          Ca = predict(gaussprLinearTuneCa, Xtestfiltered))
 
 #predict P
-rfTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
-                  method = "rf",
+gaussprLinearTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
+                  method = "gaussprLinear",
                   trControl = ctrl)
-rfTuneP
-#RMSE = 0.789, mtry = 2
-rfResults$P <- predict(rfTuneP,Xtestfiltered)
+gaussprLinearTuneP
+#RMSE = 0.913
+gaussprLinearResults$P <- predict(gaussprLinearTuneP,Xtestfiltered)
 
 #predict pH
-rfTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
-                 method = "rf",
+gaussprLinearTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
+                 method = "gaussprLinear",
                  trControl = ctrl)
-rfTunepH
-#RMSE = 0.432, mtry = 14
-rfResults$pH <- predict(rfTunepH,Xtestfiltered)
+gaussprLinearTunepH
+#RMSE = 0.508
+gaussprLinearResults$pH <- predict(gaussprLinearTunepH,Xtestfiltered)
 
 #predict SOC
-rfTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
-                  method = "rf",
+gaussprLinearTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
+                  method = "gaussprLinear",
                   trControl = ctrl)
-rfTuneSOC
-#RMSE = 0.450, mtry=27
-rfResults$SOC <- predict(rfTuneSOC,Xtestfiltered)
+gaussprLinearTuneSOC
+#RMSE = 0.512
+gaussprLinearResults$SOC <- predict(gaussprLinearTuneSOC,Xtestfiltered)
 
 #predict Sand
-rfTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
-                   method = "rf",
+gaussprLinearTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
+                   method = "gaussprLinear",
                    trControl = ctrl)
-rfTuneSand
-#RMSE = 0.366, mtry=14
-rfResults$Sand <- predict(rfTuneSand,Xtestfiltered)
+gaussprLinearTuneSand
+#RMSE = 0.494
+gaussprLinearResults$Sand <- predict(gaussprLinearTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.rf.csv",row.names = FALSE)
+write.csv(rfResults,file = "../submissions/submit.gaussprLinear.csv",row.names = FALSE)

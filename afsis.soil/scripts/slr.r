@@ -31,7 +31,7 @@ lmTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
                  trControl = ctrl)
 lmTuneCa
 #RMSE = 0.409
-testResults <- data.frame(PIDN = IDtest,
+lmResults <- data.frame(PIDN = IDtest,
                           Ca = predict(lmTuneCa, Xtestfiltered))
 
 #predict P
@@ -40,7 +40,7 @@ lmTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
                   trControl = ctrl)
 lmTuneP
 #RMSE = 0.925
-testResults$P <- predict(lmTuneP,Xtestfiltered)
+lmResults$P <- predict(lmTuneP,Xtestfiltered)
 
 #predict pH
 lmTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
@@ -48,7 +48,7 @@ lmTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
                  trControl = ctrl)
 lmTunepH
 #RMSE = 0.508
-testResults$pH <- predict(lmTunepH,Xtestfiltered)
+lmResults$pH <- predict(lmTunepH,Xtestfiltered)
 
 #predict SOC
 lmTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
@@ -56,7 +56,7 @@ lmTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
                   trControl = ctrl)
 lmTuneSOC
 #RMSE = 0.511
-testResults$SOC <- predict(lmTuneSOC,Xtestfiltered)
+lmResults$SOC <- predict(lmTuneSOC,Xtestfiltered)
 
 #predict Sand
 lmTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
@@ -64,6 +64,6 @@ lmTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
                    trControl = ctrl)
 lmTuneSand
 #RMSE = 0.495
-testResults$Sand <- predict(lmTuneSand,Xtestfiltered)
+lmResults$Sand <- predict(lmTuneSand,Xtestfiltered)
 
-write.csv(testResults,file = "../submissions/slr.csv",row.names = FALSE)
+write.csv(lmResults,file = "../submissions/slr.csv",row.names = FALSE)

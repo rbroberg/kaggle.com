@@ -31,50 +31,50 @@ indx <- createFolds(Ytrain[,1], returnTrain = TRUE)
 ctrl <- trainControl(method = "cv", index = indx)
 
 # ===================================================================
-# Random Forest Model
+# Bayesian Generalized Linear Model Regression Model
 # ===================================================================
-library(randomForest)
+library(arm)
 
 #predict Ca
-rfTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
-                 method = "rf",
+bayesglmTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
+                 method = "bayesglm",
                  trControl = ctrl)
-rfTuneCa
-#RMSE = 0.342, mtry=14
-rfResults <- data.frame(PIDN = IDtest,
-                          Ca = predict(rfTuneCa, Xtestfiltered))
+bayesglmTuneCa
+#RMSE = 0.399
+bayesglmResults <- data.frame(PIDN = IDtest,
+                          Ca = predict(bayesglmTuneCa, Xtestfiltered))
 
 #predict P
-rfTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
-                  method = "rf",
+bayesglmTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
+                  method = "bayesglm",
                   trControl = ctrl)
-rfTuneP
-#RMSE = 0.789, mtry = 2
-rfResults$P <- predict(rfTuneP,Xtestfiltered)
+bayesglmTuneP
+#RMSE = 0.913
+bayesglmResults$P <- predict(bayesglmTuneP,Xtestfiltered)
 
 #predict pH
-rfTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
-                 method = "rf",
+bayesglmTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
+                 method = "bayesglm",
                  trControl = ctrl)
-rfTunepH
-#RMSE = 0.432, mtry = 14
-rfResults$pH <- predict(rfTunepH,Xtestfiltered)
+bayesglmTunepH
+#RMSE = 0.508
+bayesglmResults$pH <- predict(bayesglmTunepH,Xtestfiltered)
 
 #predict SOC
-rfTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
-                  method = "rf",
+bayesglmTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
+                  method = "bayesglm",
                   trControl = ctrl)
-rfTuneSOC
-#RMSE = 0.450, mtry=27
-rfResults$SOC <- predict(rfTuneSOC,Xtestfiltered)
+bayesglmTuneSOC
+#RMSE = 0.512
+bayesglmResults$SOC <- predict(bayesglmTuneSOC,Xtestfiltered)
 
 #predict Sand
-rfTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
-                   method = "rf",
+bayesglmTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
+                   method = "bayesglm",
                    trControl = ctrl)
-rfTuneSand
-#RMSE = 0.366, mtry=14
-rfResults$Sand <- predict(rfTuneSand,Xtestfiltered)
+bayesglmTuneSand
+#RMSE = 0.494
+bayesglmResults$Sand <- predict(bayesglmTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.rf.csv",row.names = FALSE)
+write.csv(rfResults,file = "../submissions/submit.bayesglm.csv",row.names = FALSE)
