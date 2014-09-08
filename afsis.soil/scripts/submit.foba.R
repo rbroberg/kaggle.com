@@ -1,8 +1,6 @@
 # http://www.kaggle.com/c/afsis-soil-properties/forums/t/10176/simple-linear-regression-starting-kit
 
-# lm alone: 0.57855
-# rf alone:
-# lm + rf: 
+# foba: 0.57704
 
 rm(list = ls())
 setwd("/projects/kaggle.com/afsis.soil/scripts")

@@ -41,7 +41,7 @@ gbmTuneCa <- train(x = Xtrainfiltered, y = Ytrain$Ca,
                  method = "gbm",
                  trControl = ctrl)
 gbmTuneCa
-#RMSE = 0.399, k=27, lambda=0.001
+#RMSE = 0.358, n=150, depth = 3
 gbmResults <- data.frame(PIDN = IDtest,
                           Ca = predict(gbmTuneCa, Xtestfiltered))
 
@@ -50,7 +50,7 @@ gbmTuneP <- train(x = Xtrainfiltered, y = Ytrain$P,
                   method = "gbm",
                   trControl = ctrl)
 gbmTuneP
-#RMSE = 0.913, k=14, lambda=0.1
+#RMSE = 0.890, n=150, depth = 3
 gbmResults$P <- predict(gbmTuneP,Xtestfiltered)
 
 #predict pH
@@ -58,7 +58,7 @@ gbmTunepH <- train(x = Xtrainfiltered, y = Ytrain$pH,
                  method = "gbm",
                  trControl = ctrl)
 gbmTunepH
-#RMSE = 0.508, k=27, lambda=0.001
+#RMSE = 0.491, n=150, depth = 3
 gbmResults$pH <- predict(gbmTunepH,Xtestfiltered)
 
 #predict SOC
@@ -66,7 +66,7 @@ gbmTuneSOC <- train(x = Xtrainfiltered, y = Ytrain$SOC,
                   method = "gbm",
                   trControl = ctrl)
 gbmTuneSOC
-#RMSE = 0.512, k=27, lambda=0.001
+#RMSE = 0.425,  n=150, depth = 3
 gbmResults$SOC <- predict(gbmTuneSOC,Xtestfiltered)
 
 #predict Sand
@@ -74,7 +74,7 @@ gbmTuneSand <- train(x = Xtrainfiltered, y = Ytrain$Sand,
                    method = "gbm",
                    trControl = ctrl)
 gbmTuneSand
-#RMSE = 0.475, k=27, lambda=0.001
+#RMSE = 0.382, n=150, depth = 3
 gbmResults$Sand <- predict(gbmTuneSand,Xtestfiltered)
 
 

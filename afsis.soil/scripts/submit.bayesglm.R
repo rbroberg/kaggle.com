@@ -77,4 +77,4 @@ bayesglmTuneSand
 bayesglmResults$Sand <- predict(bayesglmTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.bayesglm.csv",row.names = FALSE)
+write.csv(bayesglmResults,file = "../submissions/submit.bayesglm.csv",row.names = FALSE)

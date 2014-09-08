@@ -76,4 +76,4 @@ gaussprLinearTuneSand
 gaussprLinearResults$Sand <- predict(gaussprLinearTuneSand,Xtestfiltered)
 
 
-write.csv(rfResults,file = "../submissions/submit.gaussprLinear.csv",row.names = FALSE)
+write.csv(gaussprLinearResults,file = "../submissions/submit.gaussprLinear.csv",row.names = FALSE)
