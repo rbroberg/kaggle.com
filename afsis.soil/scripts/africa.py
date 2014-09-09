@@ -9,7 +9,7 @@ import sklearn.feature_selection as fs
 
 headersTest = np.genfromtxt('../data/sorted_test.csv', delimiter=',', names=True)
 dftest = pd.io.parsers.read_csv('../data/sorted_test.csv')
-dftest = # 727, 3595
+dftest.shape # 727, 3595
 dftraining = pd.io.parsers.read_csv('../data/training.csv')
 dftraining.shape # 1157, 3600
 
@@ -23,16 +23,18 @@ dftrain.iloc[0,3593] # Topsoil
 dftrain['Depth'][dftrain['Depth']=='Topsoil']=1
 dftrain['Depth'][dftrain['Depth']=='Subsoil']=0
 
+# separate hash ids from test data
+dftestdata = dftest.iloc[:,1:3595]
+dftestdata.shape
 
 #Dependent/Target variables
 targets = ['Ca','P','pH','SOC','Sand']
 #targets = ['P']
 
 #Prepare empty result
-df = pd.DataFrame({"PIDN": ids, "Ca": test['PIDN'], "P": test['PIDN'], "pH": test['PIDN'], "SOC": test['PIDN'], "Sand": test['PIDN']})
+df = pd.DataFrame({"PIDN": dftest['PIDN'], "Ca": dftest['PIDN'], "P": dftest['PIDN'], "pH": dftest['PIDN'], "SOC": dftest['PIDN'], "Sand": dftest['PIDN']})
 
 for target in targets:
-dflabels[target] < dflabels[target].std() + 2*dflabels[target].std()
     # filter outliers (the logic is reversed, True is NOT OUTLIER)
     outliers = (dflabels[target] < dflabels[target].std() + 2*dflabels[target].std()) & (dflabels[target] > dflabels[target].std() - 2*dflabels[target].std())
     sum(outliers) # 1131 for 'Ca'
@@ -40,12 +42,12 @@ dflabels[target] < dflabels[target].std() + 2*dflabels[target].std()
     clf = linear.BayesianRidge(normalize=True, verbose=True, tol=.01)
     
     scores = np.array(cross_validation.cross_val_score(clf, dftrain[outliers], dflabels[target][outliers], cv=5))
-    print (-1 * scores), (-1  * scores.sum()/5)
-    continue
+    #print (-1 * scores), (-1  * scores.sum()/5)
+    #continue
     clf.fit(dftrain[outliers], dflabels[target][outliers])
-
+    
     #Get predictions
-    pred = clf.predict(dftest.tolist())
+    pred = clf.predict(dftestdata)
     
     #Store results
     df[target] = pred
