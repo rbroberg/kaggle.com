@@ -25,6 +25,8 @@ dftrain['Depth'][dftrain['Depth']=='Subsoil']=0
 
 # separate hash ids from test data
 dftestdata = dftest.iloc[:,1:3595]
+dftestdata['Depth'][dftestdata['Depth']=='Topsoil']=1
+dftestdata['Depth'][dftestdata['Depth']=='Subsoil']=0
 dftestdata.shape
 
 #Dependent/Target variables
@@ -52,5 +54,5 @@ for target in targets:
     #Store results
     df[target] = pred
 
-df.to_csv("../submissions.bayesianridge.params.csv", index=False, cols=["PIDN","Ca","P","pH","SOC","Sand"])
+df.to_csv("../submissions/submit.bayesianridge.params.csv", index=False, cols=["PIDN","Ca","P","pH","SOC","Sand"])
 
