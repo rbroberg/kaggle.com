@@ -28,8 +28,12 @@ test = datadir+'test.csv'  # path to testing file
 
 dp = 32 
 D = 2 ** dp   # number of weights use for learning
-alpha = .10    # learning rate for sgd optimization
+alpha = .11    # learning rate for sgd optimization
 
+# create time index
+days = [0,6564555,12684055,19359873,26369482,33156564,39832383,45840618]
+d=[[str(int(24*(1.-1.*(i-days[j-1])/(days[j]-days[j-1])))) for i in range(days[j-1],days[j])] for j in range(1,len(days))]
+hour=[ddd for dd in d for ddd in dd]
 
 # function definitions #######################################################
 
@@ -102,7 +106,7 @@ n = [0.] * D  # number of times we've encountered a feature
 
 # start training a logistic regression model using on pass sgd
 loss = 0.
-epoch=4
+epoch=3
 for e in range(epoch):
     for t, row in enumerate(DictReader(open(train))):
         y = 1. if row['Label'] == '1' else 0.
@@ -110,6 +114,9 @@ for e in range(epoch):
         del row['Label']  # can't let the model peek the answer
         del row['Id']  # we don't need the Id
         
+        # add time
+        row['h004'] = hour[t]
+    
         # main training procedure
         # step 1, get the hashed features
         x = get_x(row, D)
@@ -131,12 +138,15 @@ for e in range(epoch):
         w, n = update_w(w, n, x, p, y)
 
 # testing (build kaggle's submission file)
-fn='.'.join(['submit','D'+str(dp),'alpha'+str(alpha),'epoch'+str(epoch),'csv'])
+d=6042136
+testhour=[str(int(24*(1.-1.*(i/d)))) for i in range(d)]
+fn='.'.join(['submit.hour','D'+str(dp),'alpha'+str(alpha),'epoch'+str(epoch),'csv'])
 with open('../submissions/'+fn, 'w') as submission:
     submission.write('Id,Predicted\n')
     for t, row in enumerate(DictReader(open(test))):
         Id = row['Id']
         del row['Id']
+	row['h004']=testhour[t]
         x = get_x(row, D)
         p = get_p(x, w)
         submission.write('%s,%f\n' % (Id, p))

@@ -28,7 +28,7 @@ test = datadir+'test.csv'  # path to testing file
 
 dp = 32 
 D = 2 ** dp   # number of weights use for learning
-alpha = .10    # learning rate for sgd optimization
+alpha = .11    # learning rate for sgd optimization
 
 
 # function definitions #######################################################
@@ -56,6 +56,14 @@ def get_x(csv_row, D):
     for key, value in csv_row.items():
         index = int(value + key[1:], 16) % D  # weakest hash ever ;)
         x.append(index)
+    # conjugates
+    items=csv_row.items()
+    l=len(items)
+    for i in range(l-1):
+	for j in range(i+1,l):
+            index1 = int(items[i][1]+items[i][0][1:], 16)  # weakest hash ever ;)
+            index2 = int(items[j][1]+items[j][0][1:], 16)  # weakest hash ever ;)
+            x.append((index1+index2)% D)
     return x  # x contains indices of features that have a value of 1
 
 
@@ -102,7 +110,7 @@ n = [0.] * D  # number of times we've encountered a feature
 
 # start training a logistic regression model using on pass sgd
 loss = 0.
-epoch=4
+epoch=2
 for e in range(epoch):
     for t, row in enumerate(DictReader(open(train))):
         y = 1. if row['Label'] == '1' else 0.
@@ -131,7 +139,7 @@ for e in range(epoch):
         w, n = update_w(w, n, x, p, y)
 
 # testing (build kaggle's submission file)
-fn='.'.join(['submit','D'+str(dp),'alpha'+str(alpha),'epoch'+str(epoch),'csv'])
+fn='.'.join(['submit.conj01.','D'+str(dp),'alpha'+str(alpha),'epoch'+str(epoch),'csv'])
 with open('../submissions/'+fn, 'w') as submission:
     submission.write('Id,Predicted\n')
     for t, row in enumerate(DictReader(open(test))):
