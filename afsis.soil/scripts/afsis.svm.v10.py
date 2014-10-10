@@ -79,7 +79,7 @@ for i in range(5):
     clf.fit( np.hstack((xtrain,preds1[:,idx])), labels[:,i])
     preds1[:,i] = clf.predict(np.hstack((xtrain,preds1[:,idx]))).astype(float)
     preds2[:,i] = clf.predict(np.hstack((xtest,preds2[:,idx]))).astype(float)
-       
+
 sample = pd.read_csv('../download/sample_submission.csv')
 sample['Ca'] = preds2[:,0]
 sample['P'] = preds2[:,1]
