@@ -1,5 +1,4 @@
 import numpy as np
-import utilities as util
 import sklearn.linear_model as linear
 import sklearn.ensemble as ensemble
 from sklearn import cross_validation
@@ -36,22 +35,55 @@ dftestdata.shape # 727, 3594
 # ------------------------------------------------------
 # remove CO2 bands 2654:2668 
 # TODO: confirm the index are correct
+# no change in LB score
 # ------------------------------------------------------
-dftrain.drop(dftrain.columns[2654:2669],1) # 1157, 3579
-dftestdata.drop(dftestdata.columns[2654:2669],1) # 727, 3579
+# dftrain=dftrain.drop(dftrain.columns[2654:2669],1) # 1157, 3579
+# dftestdata=dftestdata.drop(dftestdata.columns[2654:2669],1) # 727, 3579
 
 #Dependent/Target variables
 targets = ['Ca','P','pH','SOC','Sand']
-#targets = ['P']
+
+# ------------------------------------------------------
+# data exploration
+# ------------------------------------------------------
+'''
+# find highest and lowest Ca values
+dflabels.iloc[:,0].max() # 9.6458153543979712
+dflabels.iloc[:,0].min() # -0.535827761069257
+minmaxidx=[]
+for i in range(5):
+	minmaxidx.append(dflabels.iloc[:,i].idxmax())
+	minmaxidx.append(dflabels.iloc[:,i].idxmin())
+	
+# subtract the mean
+tgt=4
+specdat=np.array(dftrain.iloc[:,1:3578])
+specmean=specdat.mean(axis=1)
+specmean.shape=(specmean.shape[0],1)
+specdat2=specdat-specmean
+# cut off first half of values
+specdat2=specdat2[:,1800:]
+# subtract the min Ca value
+specmin=specdat2-specdat2[dflabels.iloc[:,tgt].idxmin(),:]
+# center on first data point = 0
+speczero=np.array([specmin[i,:]-specmin[i,0] for i in range(specmin.shape[0])])
+
+lines = plt.plot(speczero[minmaxidx,:].transpose())
+plt.setp(lines[tgt*2], color='b', linewidth=3.0)
+plt.show()
+'''
 
 #Prepare empty result
 df = pd.DataFrame({"PIDN": dftest['PIDN'], "Ca": dftest['PIDN'], "P": dftest['PIDN'], "pH": dftest['PIDN'], "SOC": dftest['PIDN'], "Sand": dftest['PIDN']})
 
+tgt=0
 for target in targets:
     # filter outliers (the logic is reversed, True is NOT OUTLIER)
     outliers = (dflabels[target] < dflabels[target].std() + 2*dflabels[target].std()) & (dflabels[target] > dflabels[target].std() - 2*dflabels[target].std())
     sum(outliers) # 1131 for 'Ca'
     
+	# normalize/scale the data
+	data=
     clf = linear.BayesianRidge(normalize=True, verbose=True, tol=.01)
     
     #scores = np.array(cross_validation.cross_val_score(clf, dftrain[outliers], dflabels[target][outliers], cv=5))
@@ -64,7 +96,9 @@ for target in targets:
     
     #Store results
     df[target] = pred
-
+	
+	# increment target counter
+	tgt=tgt+1
 df.to_csv("../submissions/submit.br.noco2.csv", index=False, cols=["PIDN","Ca","P","pH","SOC","Sand"])
 
 
