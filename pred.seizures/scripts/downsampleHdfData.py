@@ -1,10 +1,10 @@
-import scipy.io
-import scipy.signal
 import os
 import pandas as pd
 import numpy as np
-import pywt
+import scipy.io
+import scipy.signal
 import h5py
+from sys import stdout
 
 datadir = "/data/www.kaggle.com/c/seizure-prediction/download/"
 
@@ -47,6 +47,7 @@ def downsample(casedir, testdat, downsamplefreq):
 		seg = i[i.rfind('_')+1 : i.find('.mat')]
 		segtype = i[i[0:i.find('_segment')].rfind('_')+1: i.find('_segment')]
 		print i, dir+i
+                stdout.flush()
 		mat = scipy.io.loadmat(dir+i)
 		matkey=segtype+"_segment_"+str(int(seg))
 		data=mat[matkey]['data'][0,0]
