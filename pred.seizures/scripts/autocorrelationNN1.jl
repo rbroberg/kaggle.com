@@ -119,7 +119,7 @@ function acModel(case,npre,ninter,ntest, epochs)
 	logactest=log(actest,10); # scale downward
 	logactest=logactest - mean(logactest); # center
 	p=0;
-	results=(ASCIIString,Int64)[]
+	results=(ASCIIString,Int64)[];
 	for k in 1:ntest
 		X1=zeros(137);
 		for i in 1:length(L1)
