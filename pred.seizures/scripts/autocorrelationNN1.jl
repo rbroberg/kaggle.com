@@ -135,6 +135,6 @@ function acModel(case,npre,ninter,ntest, epochs)
 			push!(results,(testictal*@sprintf("%04d",k),0))
 		end;
 	end;
-	println("acModel: p = ",p/test)
+	println("acModel: p = ",p/ntest)
 	return results;
 end
