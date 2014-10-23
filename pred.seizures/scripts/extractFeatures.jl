@@ -15,7 +15,7 @@ function extractFeatures(case,npre,ninter,ntest)
 	acpre=zeros(npre,16);
 	varpre=zeros(npre,16);
 	entpre=zeros(npre,16);
-	println("acModel:read preictal")
+	println("extractFeatures:read preictal")
 	for i in 1:npre
 		fn=datadir*case*"/"*preictal*@sprintf("%04d", i)*".hdf5";
 		flush(STDOUT)
@@ -31,7 +31,7 @@ function extractFeatures(case,npre,ninter,ntest)
 	acinter=zeros(ninter,16);
 	varinter=zeros(ninter,16);
 	entinter=zeros(ninter,16);
-	println("acModel:read interictal")
+	println("extractFeatures:read interictal")
 	for i in 1:ninter
 		fn=datadir*case*"/"*interictal*@sprintf("%04d", i)*".hdf5";
 		println(interictal*@sprintf("%04d", i)*".hdf5")
@@ -45,7 +45,7 @@ function extractFeatures(case,npre,ninter,ntest)
 		close(data);
 	end
 	# read the test data
-	println("acModel: read the test data")
+	println("extractFeatures: read the test data")
 	actest=zeros(ntest,16);
 	vartest=zeros(ntest,16);
 	enttest=zeros(ntest,16);
