@@ -30,7 +30,7 @@ function extractFeatures(case,npre,ninter,ntest)
 	end
 	acinter=zeros(ninter,16);
 	varinter=zeros(ninter,16);
-	entinter=zeros(npre,16);
+	entinter=zeros(ninter,16);
 	println("acModel:read interictal")
 	for i in 1:ninter
 		fn=datadir*case*"/"*interictal*@sprintf("%04d", i)*".hdf5";
@@ -48,7 +48,7 @@ function extractFeatures(case,npre,ninter,ntest)
 	println("acModel: read the test data")
 	actest=zeros(ntest,16);
 	vartest=zeros(ntest,16);
-	enttest=zeros(npre,16);
+	enttest=zeros(ntest,16);
 	for i in 1:ntest
 		fn=datadir*case*"/"*testictal*@sprintf("%04d", i)*".hdf5";
 		println(testictal*@sprintf("%04d", i)*".hdf5")
