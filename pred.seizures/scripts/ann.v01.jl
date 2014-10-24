@@ -1,6 +1,6 @@
-ver="decisiontree.ac.var.ent.v01."
+ver="ann.ac.var.ent.v01."
 
-using DecisionTree
+using ANN
 
 function auc(tp,fp)
 	(0.5*tp*fp)+(tp*(1.-fp))+(0.5(1.-tp)*(1.-fp))
@@ -34,15 +34,20 @@ for c in 1:size(cases)[1]
 	xtrain=hcat(ac[1:(npre+ninter),:],var[1:(npre+ninter),:],ent[1:(npre+ninter),:]);
 	ytrain=vcat(ones(npre),zeros(ninter));
 	xtest=hcat(ac[(npre+ninter+1):end,:],var[(npre+ninter+1):end,:],ent[(npre+ninter+1):end,:]);
-	# accuracy=nfoldCV_forest(ytrain, xtrain, 48, 10, 3); might need to use a selected sets
 	nfeatures=size(xtrain)[2]
-	model = build_forest(ytrain, xtrain, nfeatures, 400);
-	preds=apply_forest(model, xtest);
+	ytrain=convert(Vector{Int64},ytrain);
+	ann = ArtificialNeuralNetwork(nfeatures^2);
+	fit!(ann,xtrain,ytrain,epochs=40,alpha=0.1,lambda=1e-5);
+	preds = predict(ann,xtest);
+	sum(preds[:,1].>0.5)
 	for n in 1:length(preds)
 		push!(ictals,preds[n])
 		push!(clips,case*testictal*@sprintf("%04d",n)*".mat")
 	end
 end
+
+train=convert(Vector{Int64},ytrain);
+
 
 r=hcat(clips,ictals);
 dts=strftime("%Y%m%d%H%M%S",ifloor(time())) # datetime stamp

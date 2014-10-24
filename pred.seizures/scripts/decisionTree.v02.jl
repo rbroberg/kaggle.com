@@ -28,18 +28,18 @@ for c in 1:size(cases)[1]
 	ninter=cases[c,3]
 	ntest=cases[c,4]
 	
-	#ac=readdlm(datadir*case*"/ac.csv",',');	
-	#var=readdlm(datadir*case*"/var.csv",',');	
-	#ent=readdlm(datadir*case*"/ent.csv",',');	
+	ac=readdlm(datadir*case*"/ac.csv",',');	
+	var=readdlm(datadir*case*"/var.csv",',');	
+	ent=readdlm(datadir*case*"/ent.csv",',');	
 	cc=readdlm(datadir*case*"/cc.csv",',');	
-	xtrain=cc[1:(npre+ninter),:];
-	#xtrain=hcat(ac[1:(npre+ninter),:],var[1:(npre+ninter),:],ent[1:(npre+ninter),:],cc[1:(npre+ninter),:]);
+	#xtrain=cc[1:(npre+ninter),:];
+	xtrain=hcat(ac[1:(npre+ninter),:],var[1:(npre+ninter),:],ent[1:(npre+ninter),:],cc[1:(npre+ninter),:]);
 	ytrain=vcat(ones(npre),zeros(ninter));
-	xtest=cc[(npre+ninter+1):end,:];
+	#xtest=cc[(npre+ninter+1):end,:];
 	xtest=hcat(ac[(npre+ninter+1):end,:],var[(npre+ninter+1):end,:],ent[(npre+ninter+1):end,:],cc[(npre+ninter+1):end,:]);
 	# accuracy=nfoldCV_forest(ytrain, xtrain, 48, 10, 3); might need to use a selected sets
 	nfeatures=size(xtrain)[2]
-	model = build_forest(ytrain, xtrain, nfeatures, 100);
+	model = build_forest(ytrain, xtrain, nfeatures, 400);
 	preds=apply_forest(model, xtest);
 	for n in 1:length(preds)
 		push!(ictals,preds[n])
