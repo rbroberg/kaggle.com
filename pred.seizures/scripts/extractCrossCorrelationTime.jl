@@ -27,15 +27,16 @@ function extractCrossCorr(case,npre,ninter,ntest)
     println(preictal*@sprintf("%04d", 1)*".hdf5")
     data=h5open(fn,"r");
     nc=read(data["nchannels"])["values"][1];
+    dat=read(data["data"])["block0_values"];
     close(data)
     n=int((nc^2-nc)/2);
-    chunk=int(size(dat,1)/n)
+    chunk=int(size(dat,1)/n -0.5) # round down to keep chunks withing boundary
     ccpre=zeros(npre,n*n);
     println("extractCrossCorrTime:read preictal")
     for i in 1:npre
         fn=datadir*case*"/"*preictal*@sprintf("%04d", i)*".hdf5";
-        flush(STDOUT)
         println(preictal*@sprintf("%04d", i)*".hdf5")
+        flush(STDOUT)
         data=h5open(fn,"r");
         dat=read(data["data"])["block0_values"];
         for k in 1:n
@@ -72,7 +73,7 @@ function extractCrossCorr(case,npre,ninter,ntest)
         for k in 1:n
             ii=(k-1)*chunk+1;jj=(k*chunk);
             iii=(k-1)*n+1;jjj=(k*n)
-            ccteest[i,iii:jjj]=transpose(myxcorr(dat[ii:jj,:]));
+            cctest[i,iii:jjj]=transpose(myxcorr(dat[ii:jj,:]));
         end
         close(data);
     end
@@ -80,10 +81,10 @@ function extractCrossCorr(case,npre,ninter,ntest)
     writedlm(datadir*case*"/cctime.csv",cc,',');
 end
 
-extractCrossCorr("Dog_1",24,480,502);
-extractCrossCorr("Dog_2",42,500,1000);
-extractCrossCorr("Dog_3",72,1440,907);
-extractCrossCorr("Dog_4",97,804,990);
+#extractCrossCorr("Dog_1",24,480,502);
+#extractCrossCorr("Dog_2",42,500,1000);
+#extractCrossCorr("Dog_3",72,1440,907);
+#extractCrossCorr("Dog_4",97,804,990);
 extractCrossCorr("Dog_5",30,450,191);
 extractCrossCorr("Patient_1",18,50,195);
 extractCrossCorr("Patient_2",18,42,150);
