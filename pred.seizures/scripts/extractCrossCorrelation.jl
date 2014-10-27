@@ -67,10 +67,10 @@ function extractCrossCorr(case,npre,ninter,ntest)
 	writedlm(datadir*case*"/cc.csv",cc,',');
 end
 
-extractCrossCorr("Dog_1",24,480,502);
-extractCrossCorr("Dog_2",42,500,1000);
-extractCrossCorr("Dog_3",72,1440,907);
-extractCrossCorr("Dog_4",97,804,990);
+#extractCrossCorr("Dog_1",24,480,502);
+#extractCrossCorr("Dog_2",42,500,1000);
+#extractCrossCorr("Dog_3",72,1440,907);
+#extractCrossCorr("Dog_4",97,804,990);
 extractCrossCorr("Dog_5",30,450,191);
 extractCrossCorr("Patient_1",18,50,195);
 extractCrossCorr("Patient_2",18,42,150);
